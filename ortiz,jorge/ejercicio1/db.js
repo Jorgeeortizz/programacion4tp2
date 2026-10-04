@@ -8,4 +8,7 @@ db = await mysql.createConnection({
   user: process.env.DB_USER, // Usuario
   password: process.env.DB_PASS, // Contraseña
   database: process.env.DB_NAME, // Esquema
-});}
+});
+
+console.log("DB:", process.env.DB_NAME);
+}

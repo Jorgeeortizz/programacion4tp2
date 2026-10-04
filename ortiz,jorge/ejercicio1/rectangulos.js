@@ -25,7 +25,7 @@ const verificacionValidaciones = (req, res, next) => {
 
 
 router.get("/",async (req, res) => {
- const [rows] = await db.execute("SELECT * FROM rectangulos");
+ const [rows] = await db.execute("SELECT * FROM tabla_ejercicio1");
   res.json({ success: true, data: rows });
 });
 
@@ -33,7 +33,7 @@ router.get("/",async (req, res) => {
 router.get("/:id",validarId,verificacionValidaciones, async  (req, res) => {
  
     const id = Number(req.params.id);
-    const [rows] = await db.execute("SELECT * FROM rectangulos WHERE id=?", [id]);
+    const [rows] = await db.execute("SELECT * FROM tabla_ejercicio1 WHERE id=?", [id]);
 
    if (rows.length === 0) {
       return res
@@ -52,7 +52,7 @@ router.post("/", validacionRectangulo, verificacionValidaciones, async(req, res)
     const perimetro = 2* (base + altura);
     const superficie = base * altura;
 
-    const [result]= await db.execute("INSERT INTO rectangulos (base , altura ,superficie,perimetro) VALUE (?,?,?,?)", 
+    const [result]= await db.execute("INSERT INTO tabla_ejercicio1 (base , altura ,superficie,perimetro) VALUE (?,?,?,?)", 
         [base,altura,superficie,perimetro]
     );  
 
@@ -77,7 +77,7 @@ router.put("/:id", validarId, validacionRectangulo, verificacionValidaciones, as
     const superficie = Base * Altura;
 
     await db.execute(
-        'UPDATE rectangulos SET base=?, altura=?, perimetro=?, superficie=? WHERE id=?', [base, altura, perimetro, superficie, id]
+        'UPDATE tabla_ejercicio1 SET base=?, altura=?, perimetro=?, superficie=? WHERE id=?', [base, altura, perimetro, superficie, id]
     );
     res.json({ success: true, data: { id, base, altura, perimetro, superficie },
       
@@ -88,7 +88,7 @@ router.put("/:id", validarId, validacionRectangulo, verificacionValidaciones, as
 router.delete('/:id', validarId, verificacionValidaciones, async (req, res) => {
     const id = Number(req.params.id);
 
-    await db.execute('DELETE FROM rectangulos WHERE id=?', [id]);
+    await db.execute('DELETE FROM tabla_ejercicio1 WHERE id=?', [id]);
     res.json({ success: true, data: id});
 });
 
