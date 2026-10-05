@@ -12,3 +12,11 @@ db = await mysql.createConnection({
 
 console.log("DB:", process.env.DB_NAME);
 }
+
+/* modelo de datos : 
+tabla_ejercicio1 :  
+          campos : - id: Para identificar cada objeto, es primary key y auto intcrement para que no sea proporcionado por el cliente
+                    - base y altura : datos para definir el objeto, enviados por el cliente y validados antes de ser almacenados
+                    - superficie, perimeto : datos calculados por el servidor para vitar que el cliente pueda enviar valores erroneos.
+          
+*/
