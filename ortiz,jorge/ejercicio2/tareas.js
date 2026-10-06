@@ -5,12 +5,12 @@ import {param, validationResult, body,query} from "express-validator";
 const router = express.Router();
 
 const validacionTareas = [
-    body("tarea").isString().isLength({min:1, max:50}),
+    body("tarea").exists().isString().trim().isLength({min:1, max:50}).withMessage("nombre de tarea invalido"),
     body("completa").isBoolean().toBoolean(),
 ];
 
 const validarId = [
-    param("id, idIvalido")
+    param("id")
     .isInt({min:1})
     .toInt(),
 ];
@@ -38,19 +38,21 @@ router.get("/", validacionFiltros, verificacionValidaciones, async (req, res) =>
 const parametros = [];
   const { completa } = req.query;
 
-
+let sql = "SELECT * FROM tabla_tareas";
 
  if (completa !== undefined) {
     filtros.push("completa = ?");
     parametros.push(completa === "true" ? 1 : 0);
   }
 
+  
+
   if (filtros.length > 0) {
     sql += " WHERE " + filtros.join(" AND ");
   }
 
 
-  let sql = "SELECT * FROM tareas";
+  
   console.log(sql);
 
   const [rows] = await db.execute(sql, parametros);
@@ -110,6 +112,54 @@ router.put("/:id", validarId, validacionTareas, verificacionValidaciones, async 
   res.json({success: true, data: { tarea, completa, id },});
 });
 
+/*  
+PUT CORREGIDO
+
+router.put("/:id", validarId, validacionTareas, verificacionValidaciones, async (req, res) => {
+
+    const id = Number(req.params.id);
+    const { tarea, completa } = req.body;
+
+
+    // 1. Verificar si existe OTRA tarea con el mismo nombre
+    const [tareasDuplicadas] = await db.execute(
+        "SELECT id FROM tabla_tareas WHERE tarea = ? AND id <> ?",
+        [tarea, id]
+    );
+
+    if (tareasDuplicadas.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: "Ya existe otra tarea con ese nombre"
+        });
+    }
+
+
+    // 2. Actualizar la tarea
+    const [result] = await db.execute(
+        "UPDATE tabla_tareas SET tarea=?, completa=? WHERE id=?",
+        [tarea, completa, id]
+    );
+
+
+    // 3. Verificar si el ID realmente existía
+    if (result.affectedRows === 0) {
+        return res.status(404).json({
+            success: false,
+            message: "La tarea no existe"
+        });
+    }
+
+
+    // 4. Respuesta exitosa
+    res.json({ success: true, data: { id,tarea,completa}
+
+    });
+});
+
+
+*/
+
 // Borrar una tarea de la base de datos
 router.delete("/:id", validarId, verificacionValidaciones, async (req, res) => {
   const id = req.params.id;
@@ -117,5 +167,31 @@ router.delete("/:id", validarId, verificacionValidaciones, async (req, res) => {
   await db.execute("DELETE FROM tabla_tareas WHERE id=?", [id]);
   res.json({ success: true, data: id });
 });
+
+
+/*
+  delete corregido :
+
+  router.delete("/:id", validarId, verificacionValidaciones, async (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const [result] = await db.execute("DELETE FROM tabla_tareas WHERE id=?", [id]
+
+    
+    );
+
+
+    // Verificar si realmente se eliminó una tarea
+    if (result.affectedRows === 0) {
+        return res.status(404).json({success: false,message: "La tarea no existe" }
+        );
+    }
+
+
+    res.json({success: true,data: id});
+});
+
+*/
 
 export default router;
