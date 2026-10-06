@@ -5,7 +5,7 @@ import {body, param, validationResult} from "express-validator";
 const router = express.Router();
 
 const validacionAlumnos = [
-    body("alumno").isAlpha("es-ES").isLength({min:1, max:50}),
+    body("alumno").isString().trim().isLength({min:1, max:50}),
     body("idMateria").isInt({ min: 1 }),
     body("nota1").isFloat({ gt: 0 }),
     body("nota2").isFloat({ gt: 0 }),
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
 router.get("/:id",validarId, verificacionValidaciones, async  (req, res) => {
     
     const id = Number(req.params.id);
-    const [rows] = await db.execute("SELECT * FROM tareas WHERE id=?", [id]);
+    const [rows] = await db.execute("SELECT * FROM alumnos WHERE id=?", [id]);
 
    if (rows.length === 0) {
       return res
@@ -101,3 +101,12 @@ await db.execute("DELETE FROM alumnos WHERE id=?", [id]);
 });
 
 export default router;
+
+/*
+Se desarrolló una API REST con ExpressJS y MySQL para gestionar las calificaciones de alumnos y las materias de una carrera.
+El modelo utiliza tablas independientes para alumnos/calificaciones y materias, relacionadas mediante una clave foránea, evitando datos repetidos y manteniendo la integridad.
+Se implementan operaciones CRUD mediante métodos HTTP GET, POST, PUT y DELETE, utilizando respuestas JSON y códigos de estado adecuados.
+Las solicitudes son validadas con express-validator, controlando nombres, materias existentes, notas dentro de la escala definida y parámetros de las rutas.
+Además, se garantiza la unicidad de la combinación alumno-materia para impedir que un alumno tenga más de un registro de calificaciones en la misma materia
+
+*/

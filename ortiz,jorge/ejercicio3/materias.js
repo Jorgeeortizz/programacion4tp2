@@ -82,3 +82,13 @@ router.delete("/:id", validarId, verificacionValidaciones, async (req, res) => {
 });
 
 export default router;
+
+/*
+
+Este código implementa una API REST con ExpressJS para gestionar las materias almacenadas en una base de datos MySQL.
+Permite consultar, crear, modificar y eliminar materias mediante los métodos HTTP GET, POST, PUT y DELETE.
+Utiliza express-validator para validar los identificadores y comprobar que el nombre de la materia sea válido.
+Las consultas SQL se realizan mediante parámetros para mantener una comunicación segura con la base de datos.
+Además, la API devuelve respuestas JSON y códigos HTTP adecuados para informar el resultado de cada operación.
+
+*/
