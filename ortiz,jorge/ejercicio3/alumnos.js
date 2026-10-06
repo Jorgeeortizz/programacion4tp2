@@ -103,10 +103,10 @@ await db.execute("DELETE FROM alumnos WHERE id=?", [id]);
 export default router;
 
 /*
-Se desarrolló una API REST con ExpressJS y MySQL para gestionar las calificaciones de alumnos y las materias de una carrera.
-El modelo utiliza tablas independientes para alumnos/calificaciones y materias, relacionadas mediante una clave foránea, evitando datos repetidos y manteniendo la integridad.
-Se implementan operaciones CRUD mediante métodos HTTP GET, POST, PUT y DELETE, utilizando respuestas JSON y códigos de estado adecuados.
+Creamos una API REST con ExpressJS y MySQL para gestionar las calificaciones de los alumnos y las materias.
+Utilizamos tablas independientes para alumnos, calificaciones y materias, relacionadas mediante una clave foránea para no tener datos repetidos  y mantener la integridad.
+Implementamos operaciones CRUD mediante métodos HTTP GET, POST, PUT y DELETE, utilizando respuestas en formato JSON y códigos de estado.
 Las solicitudes son validadas con express-validator, controlando nombres, materias existentes, notas dentro de la escala definida y parámetros de las rutas.
-Además, se garantiza la unicidad de la combinación alumno-materia para impedir que un alumno tenga más de un registro de calificaciones en la misma materia
+tambien mantinemos la unicidad de la combinación alumno-materia para evitar que un alumno tenga más de un registro de calificaciones en la misma materia
 
 */
